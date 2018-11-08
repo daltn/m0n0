@@ -1,7 +1,8 @@
 import React from 'react';
+import Knob from './Knob';
 
 const laptopKeyMap = {
-  65: 65.406, // a
+  65: 65.406, // a 'C4'
   87: 69.295, // w
   83: 73.416, // s
   69: 77.781, // e
@@ -13,30 +14,10 @@ const laptopKeyMap = {
   72: 110.0, // h
   85: 116.54, // u
   74: 123.47, // j
-  75: 130.812, // k
+  75: 130.812, // k 'C5'
   79: 138.591, // o
   76: 146.832, // l
   80: 155.563, // p
-
-  // 65: 'C4', // a
-  // 83: 'D4', // s
-  // 68: 'E4', // d
-  // 70: 'F4', // f
-  // 71: 'G4', // g
-  // 72: 'A4', // h
-  // 74: 'B4', // j
-  // 75: 'C5', // k
-  // 76: 'D5', // l
-
-  // 87:  'C#4', // w
-  // 69:  'D#4', // e
-
-  // 84:  'F#4', // t
-  // 89:  'G#4', // y
-  // 85:  'A#4', // u
-
-  // 79:  'C#5', // o
-  // 80:  'D#5', // p
 };
 
 const context = new AudioContext();
@@ -53,12 +34,12 @@ class Synth extends React.Component {
     this.state = {
       keysDown: [],
       oscWave: '',
+      cutoff: null,
     };
-    this.onSelect = this.onSelect.bind(this);
+    this.handleChange = this.handleChange.bind(this);
   }
-  //let wavePicker = document.querySelector("select[name='waveform']");
 
-  onSelect(e) {
+  handleChange(e) {
     this.setState({
       [e.target.name]: e.target.value,
     });
@@ -100,13 +81,16 @@ class Synth extends React.Component {
         <h1>m0n0synth</h1>
         <div>
           <span>Current waveform: </span>
-          <select name="oscWave" onChange={this.onSelect}>
+          <select name="oscWave" onChange={this.handleChange}>
             <option value="sine">Sine</option>
             <option defaultValue="square">Square</option>
             <option value="sawtooth">Sawtooth</option>
             <option value="triangle">Triangle</option>
-            <option value="custom">Custom</option>
           </select>
+        </div>
+        <div className="knob">
+          <Knob onChange={this.handleChange} value={this.state.cutoff} />
+          <label>cutoff</label>
         </div>
 
         <p>Type any of the following keys 'a s d f g h j k l'</p>

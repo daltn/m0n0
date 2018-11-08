@@ -12,6 +12,14 @@ body {
   padding: 30px;
 }
 
+.knob {
+  width: 100px;
+}
+
+.knob .value {
+  text-align: center;
+}
+
 .button-container {
   height: 20px;
   width: 50px;
