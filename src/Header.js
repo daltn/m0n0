@@ -1,25 +1,26 @@
 import React from 'react';
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
 export default class Header extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       keysDown: [],
-    }
+    };
   }
-  render(){
-    return(
+  render() {
+    return (
       <header>
         <nav>
           <ul>
-            <li><Link to='/'>Simple Play</Link></li>
-            <li><Link to='/booth'>Booth</Link></li>
-            <li><Link to='/sampler'>Sampler</Link></li>
-            <li><Link to='/sequencer'>Sequencer</Link></li>
-            <li><Link to='/synth'>Synth</Link></li>
+            <li>
+              <Link to="/">Synth</Link>
+            </li>
+            <li>
+              <Link to="/sequencer">Sequencer</Link>
+            </li>
           </ul>
         </nav>
       </header>
-    )
+    );
   }
 }

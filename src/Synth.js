@@ -1,16 +1,15 @@
 import React from 'react';
 
 const laptopKeyMap = {
-
   65: 261.626, // a
   83: 293.665, // s
   68: 329.628, // d
   70: 349.228, // f
   71: 391.995, // g
-  72: 440.000, // h
+  72: 440.0, // h
   74: 493.883, // j
   75: 523.251, // j
-  76: 587.330, // l
+  76: 587.33, // l
 
   // 65: 'C4', // a
   // 83: 'D4', // s
@@ -31,11 +30,14 @@ const laptopKeyMap = {
 
   // 79:  'C#5', // o
   // 80:  'D#5', // p
-}
+};
 
 const context = new AudioContext();
+const filter = context.createBiquadFilter();
+filter.type = 'lowpass';
+filter.frequency.value = 200;
+filter.connect(context.destination);
 const masterVolume = context.createGain();
-
 masterVolume.gain.value = 0.3;
 masterVolume.connect(context.destination);
 
@@ -46,43 +48,48 @@ class Synth extends React.Component {
     super(props);
     this.state = {
       keysDown: [],
-    }
+    };
   }
 
-	onKeyDown(e) {
-		const freq = laptopKeyMap[e.keyCode]
-		if (freq && this.state.keysDown.indexOf(e.keyCode) === -1) {
+  onKeyDown(e) {
+    const freq = laptopKeyMap[e.keyCode];
+    if (freq && this.state.keysDown.indexOf(e.keyCode) === -1) {
       const newKeysDownArr = this.state.keysDown.slice();
       newKeysDownArr.push(e.keyCode);
       this.setState({ keysDown: newKeysDownArr }, () => {
+        const osc = context.createOscillator();
+        osc.frequency.value = freq;
+        oscillators[freq] = osc;
 
-  			const osc = context.createOscillator();
-  			osc.frequency.value = freq;
-  			oscillators[freq] = osc;
+        osc.connect(masterVolume);
+        masterVolume.connect(context.destination);
 
-  			osc.connect(masterVolume);
-  			masterVolume.connect(context.destination);
+        osc.start();
+      });
+    }
+  }
 
-  			osc.start();
-      })
-		}
-	}
-
-	onKeyUp(e) {
-		const freq = laptopKeyMap[e.keyCode]
+  onKeyUp(e) {
+    const freq = laptopKeyMap[e.keyCode];
     if (freq && this.state.keysDown.indexOf(e.keyCode) > -1) {
       const newKeysDownArr = this.state.keysDown;
       newKeysDownArr.splice(this.state.keysDown.indexOf(e.keyCode), 1);
-      this.setState({ keysDown: newKeysDownArr }, () => { oscillators[freq].stop(context.currentTime); })
-		}
-	}
+      this.setState({ keysDown: newKeysDownArr }, () => {
+        oscillators[freq].stop(context.currentTime);
+      });
+    }
+  }
 
   render() {
     return (
       <div className="synth">
         <label>Synth</label>
         <p>Type any of the following keys 'a s d f g h j k l</p>
-        <input placeholder="Type 'a s d f g h j k l'" onKeyDown={(e) => this.onKeyDown(e)} onKeyUp={(e) => this.onKeyUp(e)} />
+        <input
+          placeholder="Type 'a s d f g h j k l'"
+          onKeyDown={e => this.onKeyDown(e)}
+          onKeyUp={e => this.onKeyUp(e)}
+        />
       </div>
     );
   }
