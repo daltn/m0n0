@@ -33,10 +33,7 @@ const laptopKeyMap = {
 };
 
 const context = new AudioContext();
-const filter = context.createBiquadFilter();
-filter.type = 'lowpass';
-filter.frequency.value = 200;
-filter.connect(context.destination);
+
 const masterVolume = context.createGain();
 masterVolume.gain.value = 0.3;
 masterVolume.connect(context.destination);
@@ -53,6 +50,7 @@ class Synth extends React.Component {
 
   onKeyDown(e) {
     const freq = laptopKeyMap[e.keyCode];
+    console.log('......', freq);
     if (freq && this.state.keysDown.indexOf(e.keyCode) === -1) {
       const newKeysDownArr = this.state.keysDown.slice();
       newKeysDownArr.push(e.keyCode);
@@ -60,8 +58,8 @@ class Synth extends React.Component {
         const osc = context.createOscillator();
         osc.frequency.value = freq;
         oscillators[freq] = osc;
-
         osc.connect(masterVolume);
+
         masterVolume.connect(context.destination);
 
         osc.start();
@@ -83,8 +81,8 @@ class Synth extends React.Component {
   render() {
     return (
       <div className="synth">
-        <label>Synth</label>
-        <p>Type any of the following keys 'a s d f g h j k l</p>
+        <h1>m0n0synth</h1>
+        <p>Type any of the following keys 'a s d f g h j k l'</p>
         <input
           placeholder="Type 'a s d f g h j k l'"
           onKeyDown={e => this.onKeyDown(e)}
