@@ -52,12 +52,21 @@ class Synth extends React.Component {
     super(props);
     this.state = {
       keysDown: [],
+      oscWave: '',
     };
+    this.onSelect = this.onSelect.bind(this);
+  }
+  //let wavePicker = document.querySelector("select[name='waveform']");
+
+  onSelect(e) {
+    this.setState({
+      [e.target.name]: e.target.value,
+    });
   }
 
   onKeyDown(e) {
     const freq = laptopKeyMap[e.keyCode];
-    console.log('......', freq);
+    console.log('......', this.state.oscWave);
     if (freq && this.state.keysDown.indexOf(e.keyCode) === -1) {
       const newKeysDownArr = this.state.keysDown.slice();
       newKeysDownArr.push(e.keyCode);
@@ -66,7 +75,7 @@ class Synth extends React.Component {
         osc.frequency.value = freq;
         oscillators[freq] = osc;
         osc.connect(masterVolume);
-
+        osc.type = this.state.oscWave;
         masterVolume.connect(context.destination);
 
         osc.start();
@@ -89,6 +98,17 @@ class Synth extends React.Component {
     return (
       <div className="synth">
         <h1>m0n0synth</h1>
+        <div>
+          <span>Current waveform: </span>
+          <select name="oscWave" onChange={this.onSelect}>
+            <option value="sine">Sine</option>
+            <option defaultValue="square">Square</option>
+            <option value="sawtooth">Sawtooth</option>
+            <option value="triangle">Triangle</option>
+            <option value="custom">Custom</option>
+          </select>
+        </div>
+
         <p>Type any of the following keys 'a s d f g h j k l'</p>
         <input
           placeholder="Type 'a s d f g h j k l'"
