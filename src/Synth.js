@@ -82,10 +82,10 @@ class Synth extends React.Component {
         <div>
           <span>Current waveform: </span>
           <select name="oscWave" onChange={this.handleChange}>
-            <option value="sine">Sine</option>
-            <option defaultValue="square">Square</option>
-            <option value="sawtooth">Sawtooth</option>
-            <option value="triangle">Triangle</option>
+            <option value="sine">sine</option>
+            <option value="square">square</option>
+            <option value="sawtooth">sawtooth</option>
+            <option value="triangle">triangle</option>
           </select>
         </div>
         <div className="knob">
