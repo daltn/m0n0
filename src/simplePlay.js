@@ -1,6 +1,5 @@
 import React from 'react';
 import 'whatwg-fetch';
-
 import tracks from './assets/sources.example';
 
 const context = new AudioContext();
@@ -86,6 +85,15 @@ class SimplePlay extends React.Component {
   }
 
   render() {
+    {
+      /* <input
+          type="range"
+          min={0}
+          max={100}
+          defaultValue={100}
+          onChange={e => this.changeMix(e)}
+        /> */
+    }
     return (
       <div className="simple-play">
         {this.state.playing ? (
@@ -93,13 +101,6 @@ class SimplePlay extends React.Component {
         ) : (
           <button onClick={() => this.play()}>Play</button>
         )}
-        <input
-          type="range"
-          min={0}
-          max={100}
-          defaultValue={100}
-          onChange={e => this.changeMix(e)}
-        />
       </div>
     );
   }

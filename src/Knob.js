@@ -5,6 +5,7 @@ class Knob extends Component {
   constructor(props) {
     super(props);
   }
+
   handleChange = e => {
     if (this.props.onChange) this.props.onChange(e);
   };
@@ -12,7 +13,7 @@ class Knob extends Component {
   componentDidMount() {
     this.k = new SvgKnob(this.dom, {
       value_min: 0,
-      value_max: 8000,
+      value_max: 7000,
     });
 
     this.dom.addEventListener('change', this.handleChange);
@@ -23,7 +24,7 @@ class Knob extends Component {
   }
 
   render() {
-    return <svg ref={elem => (this.dom = elem)} name="cutoff" />;
+    return <svg ref={elem => (this.dom = elem)} />;
   }
 }
 

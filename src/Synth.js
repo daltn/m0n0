@@ -1,6 +1,7 @@
 import React from 'react';
 import Tone from 'tone';
 import Knob from './Knob';
+import Switch from 'react-switch';
 
 const laptopKeyMap = {
   65: 65.406, // a 'C2'
@@ -25,13 +26,12 @@ const context = new AudioContext();
 
 Tone.setContext(context);
 
-const feedbackDelay = new Tone.FeedbackDelay('8n', 0.5).toMaster();
-
 const masterVolume = context.createGain();
 masterVolume.gain.value = 0.2;
-masterVolume.connect(feedbackDelay);
+masterVolume.connect(context.destination);
 //masterVolume.connect(context.destination)
 const oscillators = {};
+const analyser = context.createAnalyser();
 
 class Synth extends React.Component {
   constructor(props) {
@@ -40,11 +40,15 @@ class Synth extends React.Component {
       keysDown: [],
       oscWave: 'square',
       cutoff: 0,
+      delay: false,
+      samples: [],
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleCutoff = this.handleCutoff.bind(this);
     this.onKeyDown = this.onKeyDown.bind(this);
     this.onKeyUp = this.onKeyUp.bind(this);
+    this.handleSwitch = this.handleSwitch.bind(this);
+    this.draw = this.draw.bind(this);
   }
 
   componentDidMount() {
@@ -64,9 +68,15 @@ class Synth extends React.Component {
   }
 
   handleCutoff(e) {
-    console.log(this.state.cutoff);
     this.setState({
       cutoff: e.detail,
+    });
+  }
+
+  handleSwitch(e) {
+    console.log(e);
+    this.setState({
+      delay: !this.state.delay,
     });
   }
 
@@ -81,8 +91,8 @@ class Synth extends React.Component {
         const osc = context.createOscillator();
         osc.frequency.value = freq;
         oscillators[freq] = osc;
-
         osc.type = this.state.oscWave;
+
         if (this.state.cutoff === 0) {
           osc.connect(masterVolume);
         } else {
@@ -96,6 +106,16 @@ class Synth extends React.Component {
           osc.connect(filter);
           filter.connect(masterVolume);
         }
+        masterVolume.connect(analyser);
+        analyser.connect(masterVolume);
+
+        const feedbackDelay = new Tone.FeedbackDelay('8n', 0.5).toMaster();
+
+        // analyzer
+
+        this.draw();
+
+        console.log(this.state.samples);
 
         masterVolume.connect(context.destination);
 
@@ -115,8 +135,46 @@ class Synth extends React.Component {
     }
   }
 
+  draw() {
+    analyser.fftSize = 2048;
+    let bufferLength = analyser.frequencyBinCount;
+    let dataArray = new Uint8Array(bufferLength);
+    analyser.getByteTimeDomainData(dataArray);
+    const canvas = document.getElementById('oscilloscope');
+    const canvasCtx = canvas.getContext('2d');
+    requestAnimationFrame(this.draw);
+
+    analyser.getByteTimeDomainData(dataArray);
+
+    canvasCtx.fillStyle = 'rgb(200, 200, 200)';
+    canvasCtx.fillRect(0, 0, canvas.width, canvas.height);
+
+    canvasCtx.lineWidth = 2;
+    canvasCtx.strokeStyle = 'rgb(0, 0, 0)';
+
+    canvasCtx.beginPath();
+
+    var sliceWidth = (canvas.width * 1.0) / bufferLength;
+    var x = 0;
+
+    for (var i = 0; i < bufferLength; i++) {
+      var v = dataArray[i] / 128.0;
+      var y = (v * canvas.height) / 2;
+
+      if (i === 0) {
+        canvasCtx.moveTo(x, y);
+      } else {
+        canvasCtx.lineTo(x, y);
+      }
+
+      x += sliceWidth;
+    }
+
+    canvasCtx.lineTo(canvas.width, canvas.height / 2);
+    canvasCtx.stroke();
+  }
+
   render() {
-    console.log(this.state.cutoff);
     return (
       <div className="synth">
         <h1>m0n0synth</h1>
@@ -131,10 +189,29 @@ class Synth extends React.Component {
         </div>
         <div className="knob">
           <Knob onChange={this.handleCutoff} detail={this.state.cutoff} />
-          <label>cutoff</label>
+          <label className="knob">cutoff</label>
         </div>
+        <label htmlFor="material-switch">
+          <Switch
+            checked={this.state.delay}
+            onChange={this.handleSwitch}
+            onColor="#86d3ff"
+            onHandleColor="#2693e6"
+            handleDiameter={30}
+            uncheckedIcon={false}
+            checkedIcon={false}
+            boxShadow="0px 1px 5px rgba(0, 0, 0, 0.6)"
+            activeBoxShadow="0px 0px 1px 10px rgba(0, 0, 0, 0.2)"
+            height={20}
+            width={48}
+            className="react-switch"
+            id="delay"
+          />
+          <span> Delay on / off </span>
+        </label>
 
         <p>type to play: A = C3</p>
+        <canvas id="oscilloscope" width="200" height="100" />
       </div>
     );
   }

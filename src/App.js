@@ -3,7 +3,7 @@ import { Switch, Route } from 'react-router-dom';
 import Header from './Header';
 import Sequencer from './Sequencer/Sequencer';
 import Synth from './Synth';
-import SynthSynth from './SynthSynth';
+import simplePlay from './simplePlay';
 
 class App extends Component {
   render() {
@@ -13,7 +13,7 @@ class App extends Component {
         <Switch>
           <Route exact path="/" component={Synth} />
           <Route path="/sequencer" component={Sequencer} />
-          <Route path="/legowelt" component={SynthSynth} />
+          <Route path="/legowelt" component={simplePlay} />
         </Switch>
       </div>
     );
