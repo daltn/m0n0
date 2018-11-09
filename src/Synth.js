@@ -151,15 +151,16 @@ class Synth extends React.Component {
     analyser.getByteTimeDomainData(dataArray);
     const canvas = document.getElementById('oscilloscope');
     const canvasCtx = canvas.getContext('2d');
+    canvasCtx.fillStyle = 'green';
     requestAnimationFrame(this.draw);
 
     analyser.getByteTimeDomainData(dataArray);
 
-    canvasCtx.fillStyle = 'rgb(200, 200, 200)';
+    canvasCtx.fillStyle = 'rgb(255, 255, 255)';
     canvasCtx.fillRect(0, 0, canvas.width, canvas.height);
 
-    canvasCtx.lineWidth = 2;
-    canvasCtx.strokeStyle = 'rgb(0, 0, 0)';
+    canvasCtx.lineWidth = 3;
+    canvasCtx.strokeStyle = 'rgb(56, 163, 159)';
 
     canvasCtx.beginPath();
 

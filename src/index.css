@@ -24,6 +24,10 @@ body {
   text-align: center;
 }
 
+#oscilloscope {
+  background-color: white;
+}
+
 .button-container {
   height: 20px;
   width: 50px;
