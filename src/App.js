@@ -3,7 +3,6 @@ import { Switch, Route } from 'react-router-dom';
 import Header from './Header';
 import Sequencer from './Sequencer/Sequencer';
 import Synth from './Synth';
-import ToneSynth from './ToneSynth';
 
 class App extends Component {
   render() {

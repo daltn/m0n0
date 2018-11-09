@@ -1,5 +1,6 @@
 import React from 'react';
 import Tone from 'tone';
+import Knob from './Knob';
 
 const laptopKeyMap = {
   65: 65.406, // a 'C2'
@@ -27,9 +28,9 @@ Tone.setContext(context);
 const feedbackDelay = new Tone.FeedbackDelay('8n', 0.5).toMaster();
 
 const masterVolume = context.createGain();
-masterVolume.gain.value = 0.3;
+masterVolume.gain.value = 0.2;
 masterVolume.connect(feedbackDelay);
-
+//masterVolume.connect(context.destination)
 const oscillators = {};
 
 class Synth extends React.Component {
@@ -41,6 +42,7 @@ class Synth extends React.Component {
       cutoff: 0,
     };
     this.handleChange = this.handleChange.bind(this);
+    this.handleCutoff = this.handleCutoff.bind(this);
     this.onKeyDown = this.onKeyDown.bind(this);
     this.onKeyUp = this.onKeyUp.bind(this);
   }
@@ -61,6 +63,13 @@ class Synth extends React.Component {
     });
   }
 
+  handleCutoff(e) {
+    console.log(this.state.cutoff);
+    this.setState({
+      cutoff: e.detail,
+    });
+  }
+
   onKeyDown(e) {
     const freq = laptopKeyMap[e.keyCode];
 
@@ -72,8 +81,17 @@ class Synth extends React.Component {
         const osc = context.createOscillator();
         osc.frequency.value = freq;
         oscillators[freq] = osc;
-        osc.connect(masterVolume);
+
         osc.type = this.state.oscWave;
+        const filter = new Tone.Filter({
+          type: 'lowpass',
+          frequency: this.state.cutoff,
+          rolloff: -24,
+          Q: 1,
+          gain: 0,
+        });
+        osc.connect(filter);
+        filter.connect(masterVolume);
 
         masterVolume.connect(context.destination);
 
@@ -107,10 +125,10 @@ class Synth extends React.Component {
             <option value="triangle">triangle</option>
           </select>
         </div>
-        {/* <div className="knob">
-          <Knob onChange={this.handleChange} value={this.state.cutoff} />
+        <div className="knob">
+          <Knob onChange={this.handleCutoff} detail={this.state.cutoff} />
           <label>cutoff</label>
-        </div> */}
+        </div>
 
         <p>type to play: A = C3</p>
       </div>
