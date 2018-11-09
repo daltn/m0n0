@@ -29,7 +29,7 @@ Tone.setContext(context);
 const masterVolume = context.createGain();
 masterVolume.gain.value = 0.2;
 masterVolume.connect(context.destination);
-//masterVolume.connect(context.destination)
+
 const oscillators = {};
 const analyser = context.createAnalyser();
 
@@ -41,8 +41,8 @@ class Synth extends React.Component {
       oscWave: 'square',
       cutoff: 0,
       delay: false,
-      samples: [],
     };
+
     this.handleChange = this.handleChange.bind(this);
     this.handleCutoff = this.handleCutoff.bind(this);
     this.onKeyDown = this.onKeyDown.bind(this);
@@ -88,11 +88,13 @@ class Synth extends React.Component {
       newKeysDownArr.push(e.keyCode);
 
       this.setState({ keysDown: newKeysDownArr }, () => {
+        // osc
         const osc = context.createOscillator();
         osc.frequency.value = freq;
         oscillators[freq] = osc;
         osc.type = this.state.oscWave;
 
+        // cutoff
         if (this.state.cutoff === 0) {
           osc.connect(masterVolume);
         } else {
@@ -103,21 +105,28 @@ class Synth extends React.Component {
             Q: 1,
             gain: 0,
           });
+
           osc.connect(filter);
           filter.connect(masterVolume);
         }
-        masterVolume.connect(analyser);
+        osc.connect(analyser);
         analyser.connect(masterVolume);
-
-        const feedbackDelay = new Tone.FeedbackDelay('8n', 0.5).toMaster();
 
         // analyzer
 
         this.draw();
 
-        console.log(this.state.samples);
+        // delay on / off
 
-        masterVolume.connect(context.destination);
+        if (this.state.delay) {
+          const feedbackDelay = new Tone.FeedbackDelay('8n', 0.3);
+          masterVolume.connect(feedbackDelay);
+          const verb = new Tone.Freeverb();
+          verb.dampening.value = 2000;
+          feedbackDelay.connect(verb).toMaster();
+        } else {
+          masterVolume.connect(context.destination);
+        }
 
         osc.start();
       });
