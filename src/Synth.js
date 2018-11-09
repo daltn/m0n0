@@ -22,9 +22,13 @@ const laptopKeyMap = {
 
 const context = new AudioContext();
 
+Tone.setContext(context);
+
+const feedbackDelay = new Tone.FeedbackDelay('8n', 0.5).toMaster();
+
 const masterVolume = context.createGain();
 masterVolume.gain.value = 0.3;
-masterVolume.connect(context.destination);
+masterVolume.connect(feedbackDelay);
 
 const oscillators = {};
 
@@ -46,7 +50,7 @@ class Synth extends React.Component {
     window.addEventListener('keyup', this.onKeyUp);
   }
 
-  componentWillMount() {
+  componentWillUnmount() {
     window.removeEventListener('keydown', this.onKeyDown);
     window.removeEventListener('keyup', this.onKeyUp);
   }
@@ -63,12 +67,14 @@ class Synth extends React.Component {
     if (freq && this.state.keysDown.indexOf(e.keyCode) === -1) {
       const newKeysDownArr = this.state.keysDown.slice();
       newKeysDownArr.push(e.keyCode);
+
       this.setState({ keysDown: newKeysDownArr }, () => {
         const osc = context.createOscillator();
         osc.frequency.value = freq;
         oscillators[freq] = osc;
         osc.connect(masterVolume);
         osc.type = this.state.oscWave;
+
         masterVolume.connect(context.destination);
 
         osc.start();
@@ -101,10 +107,10 @@ class Synth extends React.Component {
             <option value="triangle">triangle</option>
           </select>
         </div>
-        <div className="knob">
+        {/* <div className="knob">
           <Knob onChange={this.handleChange} value={this.state.cutoff} />
           <label>cutoff</label>
-        </div>
+        </div> */}
 
         <p>type to play: A = C3</p>
       </div>
