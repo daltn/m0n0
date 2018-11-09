@@ -83,15 +83,19 @@ class Synth extends React.Component {
         oscillators[freq] = osc;
 
         osc.type = this.state.oscWave;
-        const filter = new Tone.Filter({
-          type: 'lowpass',
-          frequency: this.state.cutoff,
-          rolloff: -24,
-          Q: 1,
-          gain: 0,
-        });
-        osc.connect(filter);
-        filter.connect(masterVolume);
+        if (this.state.cutoff === 0) {
+          osc.connect(masterVolume);
+        } else {
+          const filter = new Tone.Filter({
+            type: 'lowpass',
+            frequency: this.state.cutoff,
+            rolloff: -24,
+            Q: 1,
+            gain: 0,
+          });
+          osc.connect(filter);
+          filter.connect(masterVolume);
+        }
 
         masterVolume.connect(context.destination);
 

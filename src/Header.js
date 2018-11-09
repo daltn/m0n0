@@ -19,6 +19,9 @@ export default class Header extends React.Component {
             <li>
               <Link to="/sequencer">Sequencer</Link>
             </li>
+            <li>
+              <Link to="/legowelt">About</Link>
+            </li>
           </ul>
         </nav>
       </header>
