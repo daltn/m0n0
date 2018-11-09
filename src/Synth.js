@@ -1,8 +1,10 @@
 import React from 'react';
+import Tone from 'tone';
 import Knob from './Knob';
+import Keydown from 'react-keydown';
 
 const laptopKeyMap = {
-  65: 65.406, // a 'C4'
+  65: 65.406, // a 'C2'
   87: 69.295, // w
   83: 73.416, // s
   69: 77.781, // e
@@ -14,7 +16,7 @@ const laptopKeyMap = {
   72: 110.0, // h
   85: 116.54, // u
   74: 123.47, // j
-  75: 130.812, // k 'C5'
+  75: 130.812, // k 'C3'
   79: 138.591, // o
   76: 146.832, // l
   80: 155.563, // p
@@ -33,10 +35,17 @@ class Synth extends React.Component {
     super(props);
     this.state = {
       keysDown: [],
-      oscWave: '',
+      oscWave: 'square',
       cutoff: null,
     };
     this.handleChange = this.handleChange.bind(this);
+    this.onKeyDown = this.onKeyDown.bind(this);
+    this.onKeyUp = this.onKeyUp.bind(this);
+  }
+
+  componentDidMount() {
+    window.addEventListener('keydown', this.onKeyDown);
+    window.addEventListener('keyup', this.onKeyUp);
   }
 
   handleChange(e) {
@@ -76,14 +85,19 @@ class Synth extends React.Component {
   }
 
   render() {
+    window.addEventListener('keydown', event => {
+      if (event.key == 'v') {
+        document.body.style.background = 'violet';
+      }
+    });
     return (
       <div className="synth">
         <h1>m0n0synth</h1>
         <div>
           <span>Current waveform: </span>
           <select name="oscWave" onChange={this.handleChange}>
-            <option value="sine">sine</option>
             <option value="square">square</option>
+            <option value="sine">sine</option>
             <option value="sawtooth">sawtooth</option>
             <option value="triangle">triangle</option>
           </select>
@@ -93,9 +107,9 @@ class Synth extends React.Component {
           <label>cutoff</label>
         </div>
 
-        <p>Type any of the following keys 'a s d f g h j k l'</p>
+        <p>type to play</p>
         <input
-          placeholder="Type 'a s d f g h j k l'"
+          placeholder="type here A = C3 "
           onKeyDown={e => this.onKeyDown(e)}
           onKeyUp={e => this.onKeyUp(e)}
         />
