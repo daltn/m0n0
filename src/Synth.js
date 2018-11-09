@@ -1,7 +1,5 @@
 import React from 'react';
 import Tone from 'tone';
-import Knob from './Knob';
-import Keydown from 'react-keydown';
 
 const laptopKeyMap = {
   65: 65.406, // a 'C2'
@@ -36,7 +34,7 @@ class Synth extends React.Component {
     this.state = {
       keysDown: [],
       oscWave: 'square',
-      cutoff: null,
+      cutoff: 0,
     };
     this.handleChange = this.handleChange.bind(this);
     this.onKeyDown = this.onKeyDown.bind(this);
@@ -48,6 +46,11 @@ class Synth extends React.Component {
     window.addEventListener('keyup', this.onKeyUp);
   }
 
+  componentWillMount() {
+    window.removeEventListener('keydown', this.onKeyDown);
+    window.removeEventListener('keyup', this.onKeyUp);
+  }
+
   handleChange(e) {
     this.setState({
       [e.target.name]: e.target.value,
@@ -56,7 +59,7 @@ class Synth extends React.Component {
 
   onKeyDown(e) {
     const freq = laptopKeyMap[e.keyCode];
-    console.log('......', this.state.oscWave);
+
     if (freq && this.state.keysDown.indexOf(e.keyCode) === -1) {
       const newKeysDownArr = this.state.keysDown.slice();
       newKeysDownArr.push(e.keyCode);
@@ -85,16 +88,12 @@ class Synth extends React.Component {
   }
 
   render() {
-    window.addEventListener('keydown', event => {
-      if (event.key == 'v') {
-        document.body.style.background = 'violet';
-      }
-    });
+    console.log(this.state.cutoff);
     return (
       <div className="synth">
         <h1>m0n0synth</h1>
         <div>
-          <span>Current waveform: </span>
+          <span>waveform </span>
           <select name="oscWave" onChange={this.handleChange}>
             <option value="square">square</option>
             <option value="sine">sine</option>
@@ -107,12 +106,7 @@ class Synth extends React.Component {
           <label>cutoff</label>
         </div>
 
-        <p>type to play</p>
-        <input
-          placeholder="type here A = C3 "
-          onKeyDown={e => this.onKeyDown(e)}
-          onKeyUp={e => this.onKeyUp(e)}
-        />
+        <p>type to play: A = C3</p>
       </div>
     );
   }

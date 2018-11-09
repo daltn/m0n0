@@ -16,7 +16,7 @@ class Knob extends Component {
   }
 
   render() {
-    return <svg ref={elem => (this.dom = elem)} />;
+    return <svg ref={elem => (this.dom = elem)} name="cutoff" />;
   }
 }
 
