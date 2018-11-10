@@ -13,7 +13,7 @@ class Knob extends Component {
   componentDidMount() {
     this.k = new SvgKnob(this.dom, {
       value_min: 0,
-      value_max: 7000,
+      value_max: 4000,
     });
 
     this.dom.addEventListener('change', this.handleChange);
