@@ -17,7 +17,6 @@ body {
 
 .knob {
   width: 100px;
-  font-family: 'Roboto Mono', monospace;
 }
 
 .knob .value {

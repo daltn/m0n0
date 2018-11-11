@@ -26,9 +26,16 @@ const context = new AudioContext();
 
 Tone.setContext(context);
 
+const oscOutput = context.createGain();
+oscOutput.gain.value = 0.05;
+
 const masterVolume = context.createGain();
-masterVolume.gain.value = 0.2;
-masterVolume.connect(context.destination);
+masterVolume.gain.value = 0.025;
+
+const comp = new Tone.Compressor(-25, 8);
+masterVolume.connect(comp);
+
+comp.connect(context.destination);
 
 const oscillators = {};
 const analyser = context.createAnalyser();
@@ -42,6 +49,8 @@ class Synth extends React.Component {
       cutoff: 0,
       res: 1,
       delay: false,
+      delValue: 0.1,
+      delDryWet: 0,
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -82,6 +91,7 @@ class Synth extends React.Component {
   }
 
   handleSwitch(e) {
+    console.log('/////', e);
     this.setState({
       delay: !this.state.delay,
     });
@@ -102,37 +112,50 @@ class Synth extends React.Component {
         osc.type = this.state.oscWave;
 
         // cutoff
-        if (this.state.cutoff === 0) {
-          osc.connect(masterVolume);
-        } else {
-          const filter = new Tone.Filter({
-            type: 'lowpass',
-            frequency: this.state.cutoff,
-            rolloff: -24,
-            Q: this.state.res,
-            gain: 0,
-          });
+        // if (this.state.cutoff === 0) {
+        //   osc.connect(oscOutput);
+        // } else {
+        const filter = new Tone.Filter({
+          type: 'lowpass',
+          frequency: this.state.cutoff,
+          rolloff: -24,
+          Q: this.state.res,
+          gain: 0,
+        });
 
-          osc.connect(filter);
-          filter.connect(masterVolume);
-        }
-        osc.connect(analyser);
+        osc.connect(filter);
+        filter.connect(oscOutput);
+
+        filter.connect(analyser);
 
         // analyzer
-        analyser.connect(masterVolume);
+
+        analyser.connect(oscOutput);
+
         this.draw();
 
         // delay on / off
-        if (this.state.delay) {
-          const feedbackDelay = new Tone.FeedbackDelay('8n', 0.3);
-          masterVolume.connect(feedbackDelay);
-          const verb = new Tone.Freeverb();
-          verb.dampening.value = 2000;
-          feedbackDelay.connect(verb).toMaster();
-        } else {
-          masterVolume.connect(context.destination);
-        }
+        // if (this.state.delay) {
+        //   const feedbackDelay = new Tone.FeedbackDelay('16n', [
+        //     this.state.delValue,
+        //   ]);
 
+        //   console.log(feedbackDelay);
+        //   masterVolume.connect(feedbackDelay);
+        //   feedbackDelay.connect(comp);
+        // const delayNode = new DelayNode(context, {
+        //   delayTime: this.state.delDryWet,
+        //   maxDelayTime: 2,
+        // });
+        // masterVolume.connect(delayNode);
+        // delayNode.connect(comp);
+
+        // const verb = new Tone.Freeverb();
+        // verb.dampening.value = 2000;
+        // feedbackDelay.connect(verb).toMaster();
+        // } else {
+        //   masterVolume.connect(comp);
+        // }
         osc.start();
       });
     }
@@ -147,6 +170,22 @@ class Synth extends React.Component {
         oscillators[freq].stop(context.currentTime);
       });
     }
+  }
+
+  delay() {
+    if (this.state.delay) {
+      const feedbackDelay = new Tone.FeedbackDelay('16n', [
+        this.state.delValue,
+      ]);
+    }
+    // masterVolume.connect(feedbackDelay);
+    // feedbackDelay.connect(comp);
+    // const delayNode = new DelayNode(context, {
+    //   delayTime: this.state.delDryWet,
+    //   maxDelayTime: 2,
+    // });
+    // masterVolume.connect(delayNode);
+    // delayNode.connect(comp);
   }
 
   draw() {
@@ -190,6 +229,14 @@ class Synth extends React.Component {
   }
 
   render() {
+    const delayNode = new DelayNode(context, {
+      delayTime: this.state.delDryWet,
+      maxDelayTime: 1,
+    });
+
+    oscOutput.connect(delayNode);
+    delayNode.connect(masterVolume);
+
     return (
       <div className="synth">
         <h1>m0n0synth</h1>
@@ -209,6 +256,7 @@ class Synth extends React.Component {
             onChange={this.handleCutoff}
             detail={this.state.cutoff}
             font_family="Roboto Mono"
+            defaultValue={3500}
             value_min={0}
             value_max={3500}
           />
@@ -241,6 +289,33 @@ class Synth extends React.Component {
           />
           <span> Delay on / off </span>
         </label>
+
+        <div>
+          <input
+            type="range"
+            id="delValue"
+            name="delValue"
+            min="0"
+            max="0.4"
+            defaultValue={this.state.delValue}
+            onChange={this.handleChange}
+            step="0.01"
+          />
+          <span>Feedback : {this.state.delValue}</span>
+        </div>
+        <div>
+          <input
+            type="range"
+            id="delDryWet"
+            name="delDryWet"
+            min="0"
+            max="1"
+            defaultValue={this.state.delDryWet}
+            onChange={this.handleChange}
+            step="0.01"
+          />
+          <span>Dry / Wet : {this.state.delDryWet}</span>
+        </div>
 
         <p>type to play: A = C3</p>
         <canvas id="oscilloscope" width="600" height="150" />
