@@ -10,8 +10,10 @@ class Knob extends Component {
     this.k = new SvgKnob(this.dom, {
       value_min: this.props.value_min,
       value_max: this.props.value_max,
+      default_value: this.props.default_value,
       font_family: 'Roboto Mono',
       track_color: '#38a39f',
+      track_color_init: '#38a39f',
     });
 
     this.dom.addEventListener('change', this.handleChange);

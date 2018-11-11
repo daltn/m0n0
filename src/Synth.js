@@ -46,7 +46,7 @@ class Synth extends React.Component {
     this.state = {
       keysDown: [],
       oscWave: 'square',
-      cutoff: 0,
+      cutoff: 3500,
       res: 1,
       delay: false,
       delValue: 0.1,
@@ -134,28 +134,6 @@ class Synth extends React.Component {
 
         this.draw();
 
-        // delay on / off
-        // if (this.state.delay) {
-        //   const feedbackDelay = new Tone.FeedbackDelay('16n', [
-        //     this.state.delValue,
-        //   ]);
-
-        //   console.log(feedbackDelay);
-        //   masterVolume.connect(feedbackDelay);
-        //   feedbackDelay.connect(comp);
-        // const delayNode = new DelayNode(context, {
-        //   delayTime: this.state.delDryWet,
-        //   maxDelayTime: 2,
-        // });
-        // masterVolume.connect(delayNode);
-        // delayNode.connect(comp);
-
-        // const verb = new Tone.Freeverb();
-        // verb.dampening.value = 2000;
-        // feedbackDelay.connect(verb).toMaster();
-        // } else {
-        //   masterVolume.connect(comp);
-        // }
         osc.start();
       });
     }
@@ -186,6 +164,12 @@ class Synth extends React.Component {
     // });
     // masterVolume.connect(delayNode);
     // delayNode.connect(comp);
+
+    // const verb = new Tone.Freeverb();
+    // verb.dampening.value = 2000;
+    // feedbackDelay.connect(verb).toMaster();
+    // } else {
+    //   masterVolume.connect(comp);
   }
 
   draw() {
@@ -249,26 +233,27 @@ class Synth extends React.Component {
             <option value="triangle">triangle</option>
           </select>
         </div>
-        <div className="knob">
+        <div className="knob" id="filter">
           <span className="cutoff-knob">cutoff</span>
           <Knob
             name="cutoff"
             onChange={this.handleCutoff}
             detail={this.state.cutoff}
             font_family="Roboto Mono"
-            defaultValue={3500}
             value_min={0}
             value_max={3500}
+            default_value={3500}
           />
         </div>
-        <div className="knob">
+        <div className="knob" id="filter">
           <span className="resonance-knob">resonance</span>
           <Knob
             name="resonance"
             onChange={this.handleResonance}
             detail={this.state.Q}
             value_min={1}
-            value_max={20}
+            value_max={15}
+            default_value={1}
           />
         </div>
         <label htmlFor="material-switch">
