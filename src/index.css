@@ -13,11 +13,20 @@ header {
   max-width: 600px;
   border: solid;
   justify-content: center;
-  margin: 20px;
+  margin: 10px;
+}
+h3 {
+  justify-content: center;
+  text-align: center;
 }
 
 .App {
   padding: 30px;
+}
+
+.filterDiv {
+  justify-content: center;
+  margin: 10px;
 }
 
 .VCF {

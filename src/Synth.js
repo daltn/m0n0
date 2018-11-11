@@ -214,37 +214,48 @@ class Synth extends React.Component {
         <div className="waveform">
           <label>waveform </label>
           <select name="oscWave" onChange={this.handleChange}>
-            <option value="square">square</option>
-            <option value="sine">sine</option>
-            <option value="sawtooth">sawtooth</option>
-            <option value="triangle">triangle</option>
+            <option class="option" value="square">
+              square
+            </option>
+            <option class="option" value="sine">
+              sine
+            </option>
+            <option class="option" value="sawtooth">
+              sawtooth
+            </option>
+            <option class="option" value="triangle">
+              triangle
+            </option>
           </select>
         </div>
-        <section className="VCF">
-          <div className="knob-VCF" id="filter">
-            <label className="cutoff-knob">cutoff </label>
-            <Knob
-              name="cutoff"
-              onChange={this.handleCutoff}
-              detail={this.state.cutoff}
-              font_family="Roboto Mono"
-              value_min={0}
-              value_max={3500}
-              default_value={3500}
-            />
-          </div>
-          <div className="knob-VCF" id="resonance">
-            <label className="resonance-knob">resonance</label>
-            <Knob
-              name="resonance"
-              onChange={this.handleResonance}
-              detail={this.state.Q}
-              value_min={1}
-              value_max={15}
-              default_value={1}
-            />
-          </div>
-        </section>
+        <div className="filterDiv">
+          <h3>VCF</h3>
+          <section className="VCF">
+            <div className="knob-VCF" id="filter">
+              <Knob
+                name="cutoff"
+                onChange={this.handleCutoff}
+                detail={this.state.cutoff}
+                font_family="Roboto Mono"
+                value_min={0}
+                value_max={3500}
+                default_value={3500}
+              />
+              <label className="cutoff-knob">cutoff </label>
+            </div>
+            <div className="knob-VCF" id="resonance">
+              <Knob
+                name="resonance"
+                onChange={this.handleResonance}
+                detail={this.state.Q}
+                value_min={1}
+                value_max={15}
+                default_value={1}
+              />
+              <label className="resonance-knob">resonance</label>
+            </div>
+          </section>
+        </div>
         <label htmlFor="material-switch">
           <Switch
             checked={this.state.delay}
