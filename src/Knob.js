@@ -2,18 +2,16 @@ import React, { Component } from 'react';
 import SvgKnob from 'svg-knob';
 
 class Knob extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   handleChange = e => {
     if (this.props.onChange) this.props.onChange(e);
   };
 
   componentDidMount() {
     this.k = new SvgKnob(this.dom, {
-      value_min: 0,
-      value_max: 4000,
+      value_min: this.props.value_min,
+      value_max: this.props.value_max,
+      font_family: 'Roboto Mono',
+      track_color: '#38a39f',
     });
 
     this.dom.addEventListener('change', this.handleChange);

@@ -40,6 +40,7 @@ class Synth extends React.Component {
       keysDown: [],
       oscWave: 'square',
       cutoff: 0,
+      res: 1,
       delay: false,
     };
 
@@ -49,6 +50,7 @@ class Synth extends React.Component {
     this.onKeyUp = this.onKeyUp.bind(this);
     this.handleSwitch = this.handleSwitch.bind(this);
     this.draw = this.draw.bind(this);
+    this.handleResonance = this.handleResonance.bind(this);
   }
 
   componentDidMount() {
@@ -73,8 +75,15 @@ class Synth extends React.Component {
     });
   }
 
+  handleResonance(e) {
+    console.log(this.state.res);
+
+    this.setState({
+      res: e.detail,
+    });
+  }
+
   handleSwitch(e) {
-    console.log(e);
     this.setState({
       delay: !this.state.delay,
     });
@@ -102,7 +111,7 @@ class Synth extends React.Component {
             type: 'lowpass',
             frequency: this.state.cutoff,
             rolloff: -24,
-            Q: 1,
+            Q: this.state.res,
             gain: 0,
           });
 
@@ -164,12 +173,12 @@ class Synth extends React.Component {
 
     canvasCtx.beginPath();
 
-    var sliceWidth = (canvas.width * 1.0) / bufferLength;
-    var x = 0;
+    let sliceWidth = (canvas.width * 1.0) / bufferLength;
+    let x = 0;
 
-    for (var i = 0; i < bufferLength; i++) {
-      var v = dataArray[i] / 128.0;
-      var y = (v * canvas.height) / 2;
+    for (let i = 0; i < bufferLength; i++) {
+      let v = dataArray[i] / 128.0;
+      let y = (v * canvas.height) / 2;
 
       if (i === 0) {
         canvasCtx.moveTo(x, y);
@@ -198,8 +207,25 @@ class Synth extends React.Component {
           </select>
         </div>
         <div className="knob">
-          <span className="knob">cutoff</span>
-          <Knob onChange={this.handleCutoff} detail={this.state.cutoff} />
+          <span className="cutoff-knob">cutoff</span>
+          <Knob
+            name="cutoff"
+            onChange={this.handleCutoff}
+            detail={this.state.cutoff}
+            font_family="Roboto Mono"
+            value_min={0}
+            value_max={4000}
+          />
+        </div>
+        <div className="knob">
+          <span className="resonance-knob">resonance</span>
+          <Knob
+            name="resonance"
+            onChange={this.handleResonance}
+            detail={this.state.Q}
+            value_min={1}
+            value_max={20}
+          />
         </div>
         <label htmlFor="material-switch">
           <Switch

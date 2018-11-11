@@ -5,7 +5,6 @@ body {
   color: #38a39f;
   background-color: white;
   display: flex;
-  justify-content: center;
 }
 
 * {
@@ -18,10 +17,12 @@ body {
 
 .knob {
   width: 100px;
+  font-family: 'Roboto Mono', monospace;
 }
 
 .knob .value {
   text-align: center;
+  font-family: 'Roboto Mono', monospace;
 }
 
 #oscilloscope {
