@@ -27,7 +27,7 @@ const context = new AudioContext();
 Tone.setContext(context);
 
 const oscOutput = context.createGain();
-oscOutput.gain.value = 0.05;
+oscOutput.gain.value = 0.8;
 
 const masterVolume = context.createGain();
 masterVolume.gain.value = 0.025;
@@ -91,7 +91,6 @@ class Synth extends React.Component {
   }
 
   handleSwitch(e) {
-    console.log('/////', e);
     this.setState({
       delay: !this.state.delay,
     });
@@ -111,10 +110,6 @@ class Synth extends React.Component {
         oscillators[freq] = osc;
         osc.type = this.state.oscWave;
 
-        // cutoff
-        // if (this.state.cutoff === 0) {
-        //   osc.connect(oscOutput);
-        // } else {
         const filter = new Tone.Filter({
           type: 'lowpass',
           frequency: this.state.cutoff,
@@ -125,12 +120,11 @@ class Synth extends React.Component {
 
         osc.connect(filter);
         filter.connect(oscOutput);
-
         filter.connect(analyser);
 
         // analyzer
 
-        analyser.connect(oscOutput);
+        // analyser.connect(oscOutput);
 
         this.draw();
 
@@ -213,13 +207,7 @@ class Synth extends React.Component {
   }
 
   render() {
-    const delayNode = new DelayNode(context, {
-      delayTime: this.state.delDryWet,
-      maxDelayTime: 1,
-    });
-
-    oscOutput.connect(delayNode);
-    delayNode.connect(masterVolume);
+    oscOutput.connect(masterVolume);
 
     return (
       <div className="synth">
