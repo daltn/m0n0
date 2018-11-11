@@ -11,7 +11,8 @@ export default class Header extends React.Component {
   render() {
     return (
       <header>
-        <nav>
+        <h1>m0n0synth</h1>
+        {/* <nav>
           <ul>
             <li>
               <Link to="/">Synth</Link>
@@ -23,7 +24,7 @@ export default class Header extends React.Component {
               <Link to="/legowelt">About</Link>
             </li>
           </ul>
-        </nav>
+        </nav> */}
       </header>
     );
   }

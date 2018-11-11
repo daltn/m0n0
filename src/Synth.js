@@ -211,9 +211,8 @@ class Synth extends React.Component {
 
     return (
       <div className="synth">
-        <h1>m0n0synth</h1>
-        <div>
-          <span>waveform </span>
+        <div className="waveform">
+          <label>waveform </label>
           <select name="oscWave" onChange={this.handleChange}>
             <option value="square">square</option>
             <option value="sine">sine</option>
@@ -221,29 +220,31 @@ class Synth extends React.Component {
             <option value="triangle">triangle</option>
           </select>
         </div>
-        <div className="knob" id="filter">
-          <span className="cutoff-knob">cutoff</span>
-          <Knob
-            name="cutoff"
-            onChange={this.handleCutoff}
-            detail={this.state.cutoff}
-            font_family="Roboto Mono"
-            value_min={0}
-            value_max={3500}
-            default_value={3500}
-          />
-        </div>
-        <div className="knob" id="filter">
-          <span className="resonance-knob">resonance</span>
-          <Knob
-            name="resonance"
-            onChange={this.handleResonance}
-            detail={this.state.Q}
-            value_min={1}
-            value_max={15}
-            default_value={1}
-          />
-        </div>
+        <section className="VCF">
+          <div className="knob-VCF" id="filter">
+            <label className="cutoff-knob">cutoff </label>
+            <Knob
+              name="cutoff"
+              onChange={this.handleCutoff}
+              detail={this.state.cutoff}
+              font_family="Roboto Mono"
+              value_min={0}
+              value_max={3500}
+              default_value={3500}
+            />
+          </div>
+          <div className="knob-VCF" id="resonance">
+            <label className="resonance-knob">resonance</label>
+            <Knob
+              name="resonance"
+              onChange={this.handleResonance}
+              detail={this.state.Q}
+              value_min={1}
+              value_max={15}
+              default_value={1}
+            />
+          </div>
+        </section>
         <label htmlFor="material-switch">
           <Switch
             checked={this.state.delay}
