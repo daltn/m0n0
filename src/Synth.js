@@ -76,8 +76,6 @@ class Synth extends React.Component {
   }
 
   handleResonance(e) {
-    console.log(this.state.res);
-
     this.setState({
       res: e.detail,
     });
@@ -119,14 +117,12 @@ class Synth extends React.Component {
           filter.connect(masterVolume);
         }
         osc.connect(analyser);
-        analyser.connect(masterVolume);
 
         // analyzer
-
+        analyser.connect(masterVolume);
         this.draw();
 
         // delay on / off
-
         if (this.state.delay) {
           const feedbackDelay = new Tone.FeedbackDelay('8n', 0.3);
           masterVolume.connect(feedbackDelay);
@@ -231,8 +227,10 @@ class Synth extends React.Component {
           <Switch
             checked={this.state.delay}
             onChange={this.handleSwitch}
-            onColor="#86d3ff"
-            onHandleColor="#2693e6"
+            offColor="#D8D8D8"
+            offHandleColor="#c3e3e2"
+            onHandleColor="#38a39f"
+            onColor="#D8D8D8"
             handleDiameter={30}
             uncheckedIcon={false}
             checkedIcon={false}
