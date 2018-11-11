@@ -214,7 +214,7 @@ class Synth extends React.Component {
             detail={this.state.cutoff}
             font_family="Roboto Mono"
             value_min={0}
-            value_max={4000}
+            value_max={3500}
           />
         </div>
         <div className="knob">
