@@ -232,6 +232,7 @@ class Synth extends React.Component {
           <h3>VCF</h3>
           <section className="VCF">
             <div className="knob-VCF" id="filter">
+              <label className="cutoff-knob">cutoff </label>
               <Knob
                 name="cutoff"
                 onChange={this.handleCutoff}
@@ -241,9 +242,9 @@ class Synth extends React.Component {
                 value_max={3500}
                 default_value={3500}
               />
-              <label className="cutoff-knob">cutoff </label>
             </div>
             <div className="knob-VCF" id="resonance">
+              <label className="resonance-knob">resonance</label>
               <Knob
                 name="resonance"
                 onChange={this.handleResonance}
@@ -252,7 +253,6 @@ class Synth extends React.Component {
                 value_max={15}
                 default_value={1}
               />
-              <label className="resonance-knob">resonance</label>
             </div>
           </section>
         </div>
