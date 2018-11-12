@@ -4,6 +4,8 @@
   "private": true,
   "dependencies": {
     "classnames": "^2.2.6",
+    "express": "^4.16.4",
+    "path": "^0.12.7",
     "processing": "^0.2.0",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",

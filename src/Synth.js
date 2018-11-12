@@ -124,7 +124,7 @@ class Synth extends React.Component {
         filter.connect(analyser);
 
         this.draw();
-        this.delay();
+        this.delay(this.state.delay);
         osc.start();
       });
     }
@@ -141,14 +141,16 @@ class Synth extends React.Component {
     }
   }
 
-  delay() {
-    if (this.state.delay) {
-      const feedbackDelay = new Tone.FeedbackDelay(
-        this.state.delNotes,
-        this.state.delValue
-      ).connect(masterVolume);
+  delay(delSwitch) {
+    const feedbackDelay = new Tone.FeedbackDelay(
+      this.state.delNotes,
+      this.state.delValue
+    );
+    if (delSwitch) {
+      feedbackDelay.connect(masterVolume);
       oscOutput.connect(feedbackDelay);
     } else {
+      feedbackDelay.dispose();
       oscOutput.connect(masterVolume);
     }
   }
@@ -186,6 +188,7 @@ class Synth extends React.Component {
   }
 
   render() {
+    console.log(this.state.delay);
     // oscOutput.connect(masterVolume);
 
     return (
@@ -193,18 +196,10 @@ class Synth extends React.Component {
         <div className="waveform">
           <label>waveform </label>
           <select name="oscWave" onChange={this.handleChange}>
-            <option class="option" value="square">
-              square
-            </option>
-            <option class="option" value="sine">
-              sine
-            </option>
-            <option class="option" value="sawtooth">
-              sawtooth
-            </option>
-            <option class="option" value="triangle">
-              triangle
-            </option>
+            <option value="square">square</option>
+            <option value="sine">sine</option>
+            <option value="sawtooth">sawtooth</option>
+            <option value="triangle">triangle</option>
           </select>
         </div>
         <div className="filterDiv">
