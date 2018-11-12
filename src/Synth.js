@@ -50,7 +50,7 @@ class Synth extends React.Component {
       res: 1,
       delay: false,
       delValue: 0.15,
-      delNotes: 0.58,
+      delNotes: 0.25,
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -67,6 +67,8 @@ class Synth extends React.Component {
     window.addEventListener('keydown', this.onKeyDown);
     window.addEventListener('keyup', this.onKeyUp);
   }
+
+  componentDidUpdate() {}
 
   componentWillUnmount() {
     window.removeEventListener('keydown', this.onKeyDown);
@@ -228,7 +230,7 @@ class Synth extends React.Component {
             </div>
           </section>
         </div>
-        <h3>Delay</h3>
+        <h3>DELAY</h3>
         <div className="delay">
           <div className="delOnOff">
             <label htmlFor="material-switch">
@@ -250,7 +252,7 @@ class Synth extends React.Component {
             </label>
           </div>
 
-          <span>Feedback {this.state.delValue}</span>
+          <span>feedback {this.state.delValue}</span>
 
           <div>
             <input
@@ -264,14 +266,14 @@ class Synth extends React.Component {
               step="0.01"
             />
           </div>
-          <span>Delay Time {this.state.delNotes}</span>
+          <span>delay time {this.state.delNotes}</span>
           <div>
             <input
               type="range"
               id="delNotes"
               name="delNotes"
               min="0"
-              max="2"
+              max="1"
               defaultValue={this.state.delNotes}
               onChange={this.handleChange}
               step="0.01"

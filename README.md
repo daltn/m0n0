@@ -31,7 +31,7 @@ lowpass filter w/ -24 db rolloff
 feedback delay built from tone.js
 
 - toggle: on / off
-- delay time : 0 - 2 seconds
+- delay time : 0 - 1
 - output feedback level : 0 - 0.4
 
 ## Oscilloscope
