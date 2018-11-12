@@ -142,6 +142,7 @@ class Synth extends React.Component {
   }
 
   delay(delSwitch) {
+    console.log('INSIDE DELAY', delSwitch);
     const feedbackDelay = new Tone.FeedbackDelay(
       this.state.delNotes,
       this.state.delValue
@@ -150,7 +151,6 @@ class Synth extends React.Component {
       feedbackDelay.connect(masterVolume);
       oscOutput.connect(feedbackDelay);
     } else {
-      feedbackDelay.dispose();
       oscOutput.connect(masterVolume);
     }
   }
@@ -193,19 +193,18 @@ class Synth extends React.Component {
 
     return (
       <div className="synth">
-        <h3>VCO</h3>
-        <div className="waveform">
-          <p>
-            <label>waveform </label>
-          </p>
-          <select name="oscWave" onChange={this.handleChange}>
-            <option value="square">square</option>
-            <option value="sine">sine</option>
-            <option value="sawtooth">sawtooth</option>
-            <option value="triangle">triangle</option>
-          </select>
-        </div>
         <div className="filterDiv">
+          <h3>OSC</h3>
+
+          <div className="waveform">
+            <select name="oscWave" onChange={this.handleChange}>
+              <option value="square">square</option>
+              <option value="sine">sine</option>
+              <option value="sawtooth">sawtooth</option>
+              <option value="triangle">triangle</option>
+            </select>
+          </div>
+
           <h3>VCF</h3>
           <section className="VCF">
             <div className="knob-VCF" id="filter">
@@ -233,53 +232,57 @@ class Synth extends React.Component {
             </div>
           </section>
         </div>
-        <label htmlFor="material-switch">
-          <Switch
-            checked={this.state.delay}
-            onChange={this.handleSwitch}
-            offColor="#D8D8D8"
-            offHandleColor="#c3e3e2"
-            onHandleColor="#38a39f"
-            onColor="#D8D8D8"
-            handleDiameter={30}
-            uncheckedIcon={false}
-            checkedIcon={false}
-            height={20}
-            width={48}
-            className="react-switch"
-            id="delay"
-          />
-          <span> Delay on / off </span>
-        </label>
+        <h3>Delay</h3>
+        <div className="delay">
+          <div className="delOnOff">
+            <label htmlFor="material-switch">
+              <Switch
+                checked={this.state.delay}
+                onChange={this.handleSwitch}
+                offColor="#D8D8D8"
+                offHandleColor="#c3e3e2"
+                onHandleColor="#38a39f"
+                onColor="#D8D8D8"
+                handleDiameter={30}
+                uncheckedIcon={false}
+                checkedIcon={false}
+                height={20}
+                width={48}
+                className="react-switch"
+                id="delay"
+              />
+            </label>
+          </div>
 
-        <div>
-          <input
-            type="range"
-            id="delValue"
-            name="delValue"
-            min="0"
-            max="0.4"
-            defaultValue={this.state.delValue}
-            onChange={this.handleChange}
-            step="0.01"
-          />
           <span>Feedback : {this.state.delValue}</span>
-        </div>
-        <div>
-          <input
-            type="range"
-            id="delNotes"
-            name="delNotes"
-            min="0"
-            max="1"
-            defaultValue={this.state.delNotes}
-            onChange={this.handleChange}
-            step="0.01"
-          />
+
+          <div>
+            <input
+              type="range"
+              id="delValue"
+              name="delValue"
+              min="0"
+              max="0.4"
+              defaultValue={this.state.delValue}
+              onChange={this.handleChange}
+              step="0.01"
+            />
+          </div>
           <span>Delay Time : {this.state.delNotes}</span>
+          <div>
+            <input
+              type="range"
+              id="delNotes"
+              name="delNotes"
+              min="0"
+              max="1"
+              defaultValue={this.state.delNotes}
+              onChange={this.handleChange}
+              step="0.01"
+            />
+          </div>
         </div>
 
-        <p>type to play: A = C3</p>
         <canvas id="oscilloscope" width="600" height="150" />
       </div>
     );

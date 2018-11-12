@@ -17,11 +17,6 @@ header {
   margin: 20px;
 }
 
-h3 {
-  justify-content: center;
-  text-align: center;
-}
-
 select {
   font-family: 'Roboto Mono', monospace;
   font-size: 16px;
@@ -30,13 +25,17 @@ select {
   border-color: #38a39f;
 }
 
+h3 {
+  text-align: center;
+}
+
 .waveform {
   justify-content: center;
   text-align: center;
 }
 
 .App {
-  padding: 30px;
+  padding: 10px;
 }
 
 .filterDiv {
@@ -44,10 +43,25 @@ select {
   margin: 10px;
 }
 
+.synth {
+  align-items: flex-start;
+}
+
+.delay {
+  justify-content: center;
+  text-align: center;
+  align-items: flex-start;
+  padding: 10px;
+}
+
+.delOnOff {
+  flex: 2 2 10px;
+}
+
 .VCF {
   display: flex;
   max-width: 600px;
-  margin: 0 auto;
+
   justify-content: center;
   text-align: center;
 }
@@ -59,4 +73,8 @@ select {
 
 #oscilloscope {
   background-color: white;
+}
+
+#onOff {
+  padding: 20%;
 }
