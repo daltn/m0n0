@@ -124,7 +124,7 @@ class Synth extends React.Component {
         filter.connect(analyser);
 
         this.draw();
-        this.delay(this.state.delay);
+        this.delay();
         osc.start();
       });
     }
@@ -141,12 +141,12 @@ class Synth extends React.Component {
     }
   }
 
-  delay(delSwitch) {
+  delay() {
     const feedbackDelay = new Tone.FeedbackDelay(
       this.state.delNotes,
       this.state.delValue
     );
-    if (delSwitch) {
+    if (this.state.delay) {
       feedbackDelay.connect(masterVolume);
       oscOutput.connect(feedbackDelay);
     } else {
