@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 import { Switch, Route } from 'react-router-dom';
 import Header from './Header';
-import Sequencer from './Sequencer/Sequencer';
 import Synth from './Synth';
-import simplePlay from './simplePlay';
 
 class App extends Component {
   render() {
@@ -12,8 +10,6 @@ class App extends Component {
         <Header />
         <Switch>
           <Route exact path="/" component={Synth} />
-          <Route path="/sequencer" component={Sequencer} />
-          <Route path="/legowelt" component={simplePlay} />
         </Switch>
       </div>
     );
