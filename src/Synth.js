@@ -142,7 +142,6 @@ class Synth extends React.Component {
   }
 
   delay(delSwitch) {
-    console.log('INSIDE DELAY', delSwitch);
     const feedbackDelay = new Tone.FeedbackDelay(
       this.state.delNotes,
       this.state.delValue
@@ -188,9 +187,6 @@ class Synth extends React.Component {
   }
 
   render() {
-    console.log(this.state.delay);
-    // oscOutput.connect(masterVolume);
-
     return (
       <div className="synth">
         <div className="filterDiv">
