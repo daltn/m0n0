@@ -49,8 +49,8 @@ class Synth extends React.Component {
       cutoff: 3500,
       res: 1,
       delay: false,
-      delValue: 0.1,
-      delNotes: 0.3,
+      delValue: 0.15,
+      delNotes: 0.58,
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -254,7 +254,7 @@ class Synth extends React.Component {
             </label>
           </div>
 
-          <span>Feedback : {this.state.delValue}</span>
+          <span>Feedback {this.state.delValue}</span>
 
           <div>
             <input
@@ -268,14 +268,14 @@ class Synth extends React.Component {
               step="0.01"
             />
           </div>
-          <span>Delay Time : {this.state.delNotes}</span>
+          <span>Delay Time {this.state.delNotes}</span>
           <div>
             <input
               type="range"
               id="delNotes"
               name="delNotes"
               min="0"
-              max="1"
+              max="2"
               defaultValue={this.state.delNotes}
               onChange={this.handleChange}
               step="0.01"
