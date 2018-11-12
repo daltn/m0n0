@@ -32,7 +32,7 @@ oscOutput.gain.value = 0.8;
 const masterVolume = context.createGain();
 masterVolume.gain.value = 0.025;
 
-const comp = new Tone.Compressor(-25, 8);
+const comp = new Tone.Compressor(-30, 8);
 masterVolume.connect(comp);
 
 comp.connect(context.destination);
@@ -50,7 +50,7 @@ class Synth extends React.Component {
       res: 1,
       delay: false,
       delValue: 0.1,
-      delDryWet: 0,
+      delNotes: 0.3,
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -60,6 +60,7 @@ class Synth extends React.Component {
     this.handleSwitch = this.handleSwitch.bind(this);
     this.draw = this.draw.bind(this);
     this.handleResonance = this.handleResonance.bind(this);
+    this.delay = this.delay.bind(this);
   }
 
   componentDidMount() {
@@ -122,12 +123,8 @@ class Synth extends React.Component {
         filter.connect(oscOutput);
         filter.connect(analyser);
 
-        // analyzer
-
-        // analyser.connect(oscOutput);
-
         this.draw();
-
+        this.delay();
         osc.start();
       });
     }
@@ -146,24 +143,14 @@ class Synth extends React.Component {
 
   delay() {
     if (this.state.delay) {
-      const feedbackDelay = new Tone.FeedbackDelay('16n', [
-        this.state.delValue,
-      ]);
+      const feedbackDelay = new Tone.FeedbackDelay(
+        this.state.delNotes,
+        this.state.delValue
+      ).connect(masterVolume);
+      oscOutput.connect(feedbackDelay);
+    } else {
+      oscOutput.connect(masterVolume);
     }
-    // masterVolume.connect(feedbackDelay);
-    // feedbackDelay.connect(comp);
-    // const delayNode = new DelayNode(context, {
-    //   delayTime: this.state.delDryWet,
-    //   maxDelayTime: 2,
-    // });
-    // masterVolume.connect(delayNode);
-    // delayNode.connect(comp);
-
-    // const verb = new Tone.Freeverb();
-    // verb.dampening.value = 2000;
-    // feedbackDelay.connect(verb).toMaster();
-    // } else {
-    //   masterVolume.connect(comp);
   }
 
   draw() {
@@ -175,39 +162,31 @@ class Synth extends React.Component {
     const canvasCtx = canvas.getContext('2d');
     canvasCtx.fillStyle = 'green';
     requestAnimationFrame(this.draw);
-
     analyser.getByteTimeDomainData(dataArray);
-
     canvasCtx.fillStyle = 'rgb(255, 255, 255)';
     canvasCtx.fillRect(0, 0, canvas.width, canvas.height);
-
     canvasCtx.lineWidth = 3;
     canvasCtx.strokeStyle = 'rgb(56, 163, 159)';
-
     canvasCtx.beginPath();
 
     let sliceWidth = (canvas.width * 1.0) / bufferLength;
     let x = 0;
-
     for (let i = 0; i < bufferLength; i++) {
       let v = dataArray[i] / 128.0;
       let y = (v * canvas.height) / 2;
-
       if (i === 0) {
         canvasCtx.moveTo(x, y);
       } else {
         canvasCtx.lineTo(x, y);
       }
-
       x += sliceWidth;
     }
-
     canvasCtx.lineTo(canvas.width, canvas.height / 2);
     canvasCtx.stroke();
   }
 
   render() {
-    oscOutput.connect(masterVolume);
+    // oscOutput.connect(masterVolume);
 
     return (
       <div className="synth">
@@ -291,15 +270,15 @@ class Synth extends React.Component {
         <div>
           <input
             type="range"
-            id="delDryWet"
-            name="delDryWet"
+            id="delNotes"
+            name="delNotes"
             min="0"
             max="1"
-            defaultValue={this.state.delDryWet}
+            defaultValue={this.state.delNotes}
             onChange={this.handleChange}
             step="0.01"
           />
-          <span>Dry / Wet : {this.state.delDryWet}</span>
+          <span>Delay Time : {this.state.delNotes}</span>
         </div>
 
         <p>type to play: A = C3</p>
