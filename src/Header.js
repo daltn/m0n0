@@ -10,22 +10,11 @@ export default class Header extends React.Component {
   }
   render() {
     return (
-      <header>
-        <h1>m0n0synth</h1>
-        {/* <nav>
-          <ul>
-            <li>
-              <Link to="/">Synth</Link>
-            </li>
-            <li>
-              <Link to="/sequencer">Sequencer</Link>
-            </li>
-            <li>
-              <Link to="/legowelt">About</Link>
-            </li>
-          </ul>
-        </nav> */}
-      </header>
+      <a href="https://github.com/daltn/m0n0">
+        <header>
+          <h1>m0n0synth</h1>
+        </header>
+      </a>
     );
   }
 }
