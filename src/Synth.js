@@ -193,8 +193,11 @@ class Synth extends React.Component {
 
     return (
       <div className="synth">
+        <h3>VCO</h3>
         <div className="waveform">
-          <label>waveform </label>
+          <p>
+            <label>waveform </label>
+          </p>
           <select name="oscWave" onChange={this.handleChange}>
             <option value="square">square</option>
             <option value="sine">sine</option>
