@@ -40,6 +40,8 @@ feedback delay built from tone.js
 
 ## Notes
 
+This is not a true monophonic synthesizer since you can play more than one note at a time. Each note that is hit fires off it's own unique oscillator so polyphony is possible :)
+
 Built on a fork from [react-webaudio-examples](https://github.com/oftenfrequent/react-webaudio-examples)
 
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app)

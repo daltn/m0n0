@@ -68,8 +68,6 @@ class Synth extends React.Component {
     window.addEventListener('keyup', this.onKeyUp);
   }
 
-  componentDidUpdate() {}
-
   componentWillUnmount() {
     window.removeEventListener('keydown', this.onKeyDown);
     window.removeEventListener('keyup', this.onKeyUp);
@@ -107,7 +105,6 @@ class Synth extends React.Component {
       newKeysDownArr.push(e.keyCode);
 
       this.setState({ keysDown: newKeysDownArr }, () => {
-        // osc
         const osc = context.createOscillator();
         osc.frequency.value = freq;
         oscillators[freq] = osc;
@@ -148,10 +145,11 @@ class Synth extends React.Component {
       this.state.delNotes,
       this.state.delValue
     );
-    if (this.state.delay) {
-      feedbackDelay.connect(masterVolume);
-      oscOutput.connect(feedbackDelay);
-    } else {
+    oscOutput.connect(feedbackDelay);
+    feedbackDelay.connect(masterVolume);
+    if (!this.state.delay) {
+      oscOutput.disconnect(feedbackDelay);
+      feedbackDelay.disconnect(masterVolume);
       oscOutput.connect(masterVolume);
     }
   }
@@ -193,7 +191,6 @@ class Synth extends React.Component {
       <div className="synth">
         <div className="filterDiv">
           <h3>OSC</h3>
-
           <div className="waveform">
             <select name="oscWave" onChange={this.handleChange}>
               <option value="square">square</option>
@@ -202,7 +199,6 @@ class Synth extends React.Component {
               <option value="triangle">triangle</option>
             </select>
           </div>
-
           <h3>VCF</h3>
           <section className="VCF">
             <div className="knob-VCF" id="filter">
@@ -251,9 +247,7 @@ class Synth extends React.Component {
               />
             </label>
           </div>
-
           <span>feedback {this.state.delValue}</span>
-
           <div>
             <input
               type="range"
@@ -280,7 +274,6 @@ class Synth extends React.Component {
             />
           </div>
         </div>
-
         <canvas id="oscilloscope" width="600" height="150" />
       </div>
     );
