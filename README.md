@@ -30,7 +30,6 @@ lowpass filter w/ -24 db rolloff
 
 feedback delay built from tone.js
 
-- toggle: on / off
 - delay time : 0 - 1
 - output feedback level : 0 - 0.4
 
@@ -45,7 +44,3 @@ This is not a true monophonic synthesizer since you can play more than one note 
 Built on a fork from [react-webaudio-examples](https://github.com/oftenfrequent/react-webaudio-examples)
 
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app)
-
-## UI
-
-![UI](./public/m0n0.png)
