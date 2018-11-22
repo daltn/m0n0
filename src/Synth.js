@@ -48,7 +48,7 @@ class Synth extends React.Component {
       oscWave: 'square',
       cutoff: 3500,
       res: 1,
-      delay: false,
+      delay: true,
       delValue: 0.15,
       delNotes: 0.25,
     };
@@ -228,25 +228,6 @@ class Synth extends React.Component {
         </div>
         <h3>DELAY</h3>
         <div className="delay">
-          <div className="delOnOff">
-            <label htmlFor="material-switch">
-              <Switch
-                checked={this.state.delay}
-                onChange={this.handleSwitch}
-                offColor="#D8D8D8"
-                offHandleColor="#c3e3e2"
-                onHandleColor="#38a39f"
-                onColor="#D8D8D8"
-                handleDiameter={30}
-                uncheckedIcon={false}
-                checkedIcon={false}
-                height={20}
-                width={48}
-                className="react-switch"
-                id="delay"
-              />
-            </label>
-          </div>
           <span>feedback {this.state.delValue}</span>
           <div>
             <input
